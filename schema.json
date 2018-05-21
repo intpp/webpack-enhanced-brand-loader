@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "brand": {
+      "type": "string"
+    },
+    "test": {
+      "anyOf": [
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "RegExp"
+        }
+      ]
+    }
+  }
+}
