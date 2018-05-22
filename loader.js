@@ -9,7 +9,7 @@ const regex = /\.[^.]+$/;
 
 let notified = false;
 
-module.exports = function (content) {
+module.exports = function (content, map, meta) {
   const options = getOptions(this);
 
   validateOptions(schema, options, packageName);
@@ -32,13 +32,13 @@ module.exports = function (content) {
       const stats = fs.statSync(nextFilePath);
 
       if (stats.isFile()) {
-        return fs.readFile(nextFilePath, 'utf-8', function (err, data) {
+        return fs.readFile(nextFilePath, null, function (err, data) {
           if (err) {
             return callback(err);
           }
 
           addDependency(nextFilePath);
-          callback(null, data);
+          callback(null, data, map, meta);
         });
       }
     } catch (e) {
@@ -50,5 +50,6 @@ module.exports = function (content) {
     }
   }
 
-  callback(null, content);
+  callback(null, content, map, meta);
 };
+module.exports.raw = true;

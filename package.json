@@ -1,6 +1,6 @@
 {
   "name": "webpack-enhanced-brand-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "loader.js",
   "author": "intpp",
   "license": "MIT",
