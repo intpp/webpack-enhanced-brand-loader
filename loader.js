@@ -15,9 +15,18 @@ const load = (originalResource, brand, callback) => {
   const encoding = isHtml ? 'utf-8' : null;
 
   const resource = brand ? originalResource.replace(regex, `.${brand}${extension}`) : originalResource;
-  const stats = fs.statSync(resource);
 
-  const content = fs.readFileSync(resource, encoding);
+  if (fs.existsSync(resource)) {
+    const content = fs.readFileSync(resource, encoding);
+
+    return {
+      resource,
+      content,
+      isHtml,
+    };
+  }
+
+  const content = fs.readFileSync(originalResource, encoding);
 
   return {
     resource,
@@ -45,21 +54,17 @@ module.exports = function (originalContent, map, meta) {
     }
   }
 
-  try {
-    const { resource, content, isHtml } = load(originalResource, brand);
+  const { resource, content, isHtml } = load(originalResource, brand);
 
-    if (originalResource !== resource) {
-      addDependency(resource);
-    }
-
-    if (isHtml) {
-      return callback(null, `module.exports = ${JSON.stringify(content)}`, map, meta);
-    }
-
-    return callback(null, content, map, meta);
-  } catch (e) {
-    return callback(null, originalContent, map, meta);
+  if (originalResource !== resource) {
+    addDependency(resource);
   }
+
+  if (isHtml) {
+    return callback(null, `module.exports = ${JSON.stringify(content)}`, map, meta);
+  }
+
+  return callback(null, content, map, meta);
 };
 
 module.exports.raw = true;
