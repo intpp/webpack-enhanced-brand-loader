@@ -67,4 +67,3 @@ module.exports = function (originalContent, map, meta) {
   return callback(null, content, map, meta);
 };
 
-module.exports.raw = true;
